@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MicroLearn App</title>
+  <style>
+    :root {
+      --brown: #5C4033;
+      --orange: #F4A261;
+      --light-bg: #FFF8F1;
+      --white: #fff;
+      --text: #2E2E2E;
+      --success-bg: #dff0d8;
+      --error-bg: #f8d7da;
+      --success-text: #3c763d;
+      --error-text: #721c24;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--light-bg);
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .screen {
+      max-width: 400px;
+      margin: auto;
+      padding: 1rem;
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    h2 {
+      color: var(--brown);
+      margin-bottom: 0.5rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.8rem;
+      background: var(--orange);
+      color: var(--white);
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin: 0.5rem 0;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 400px;
+      background: var(--white);
+      border-top: 1px solid #ccc;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.5rem 0;
+      z-index: 999;
+    }
+
+    .nav button {
+      background: none;
+      border: none;
+      color: var(--brown);
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .module-card {
+      background: var(--white);
+      padding: 1rem;
+      border-left: 5px solid var(--brown);
+      margin: 1rem 0;
+      border-radius: 8px;
+    }
+
+    .status {
+      font-size: 0.85rem;
+      color: var(--orange);
+    }
+
+    .feedback {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+
+    .success {
+      background: var(--success-bg);
+      color: var(--success-text);
+    }
+
+    .error {
+      background: var(--error-bg);
+      color: var(--error-text);
+    }
+
+    .empty {
+      text-align: center;
+      color: #999;
+      font-size: 0.95rem;
+      margin-top: 2rem;
+    }
+
+    .context-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .context-nav button {
+      width: 48%;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 15px;
+      }
+
+      .nav button {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Home -->
+  <!-- Module Viewer -->
+  <div class="screen" id="moduleScreen" role="region">
+    <h2>Module 1: Page 1</h2>
+    <p>Intro content goes here...</p>
+    <div class="context-nav">
+      <button onclick="alert('Swipe Left')">← Prev</button>
+      <button onclick="completeModule()">Complete</button>
+    </div>
+  </div>
+
+  <!-- Progress Screen -->
+  <div class="screen" id="progressScreen" role="main">
+    <h2>Your Progress</h2>
+    <div class="success feedback">
+      <p>✔ Module 1 Completed</p>
+    </div>
+  </div>
+
+  <!-- Rewards -->
+  <div class="screen" id="rewardsScreen" role="main">
+    <h2>Rewards</h2>
+    <div id="rewardSection" class="empty">You haven't earned any rewards yet. Complete modules to unlock!</div>
+  </div>
+
+  <!-- Profile -->
+  <div class="screen" id="profileScreen" role="main">
+    <h2>Profile</h2>
+    <input type="text" id="name" placeholder="Your Name" />
+    <input type="email" id="email" placeholder="Email" />
+    <button onclick="validateForm()">Save</button>
+    <div id="profileFeedback" class="feedback" style="display: none;"></div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="nav" aria-label="Main navigation">
+    <button onclick="goTo('homeScreen')">Home</button>
+    <button onclick="goTo('progressScreen')">Progress</button>
+    <button onclick="goTo('rewardsScreen')">Rewards</button>
+    <button onclick="goTo('profileScreen')">Profile</button>
+  </div>
+
+  <script>
+    function goTo(screenId) {
+      const screens = document.querySelectorAll('.screen');
+      screens.forEach(s => s.classList.remove('active'));
+      document.getElementById(screenId).classList.add('active');
+    }
+
+    function completeModule() {
+      goTo('progressScreen');
+      document.getElementById('rewardSection').innerHTML = `
+        🎉 You've earned your first reward! <br/>Check back soon for more.
+      `;
+    }
+
+    function validateForm() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const feedback = document.getElementById('profileFeedback');
+
+      if (!email) {
+        feedback.textContent = "Please enter email";
+        feedback.className = "feedback error";
+        feedback.style.display = "block";
+        return;
+      }
+
+      feedback.textContent = "Details saved successfully!";
+      feedback.className = "feedback success";
+      feedback.style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
